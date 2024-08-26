@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <!-- 头部 -->
-        <el-header>
+        <el-header style="height: 100px;">
             <div class="words">
                 <span @click="menuClick('adminLayout')">
                     <a href="http://localhost:8082" title="点击返回主界面" class="iconfont icon-r-love" style="font-size: 26px; text-decoration: none; color: black;">

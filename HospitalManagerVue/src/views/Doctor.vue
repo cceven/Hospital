@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <!-- 头部 -->
-        <el-header>
+        <el-header style="height: 100px;">
             <div class="words">
                 <span
                     @click="menuClick('doctorLayout')"
@@ -24,6 +24,7 @@
                 >
             </div>
         </el-header>
+
         <el-container>
             <!-- 侧边栏 -->
             <el-aside width="200px">

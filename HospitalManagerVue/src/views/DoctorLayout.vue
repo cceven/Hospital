@@ -22,7 +22,7 @@
 
         <el-row>
             <el-col :span="24">
-                <img src="@/assets/back.jpg" style="width: 941px;margin-left: 25px;">
+                <img src="@/assets/back_img.png" style="width: 941px;margin-left: 25px;">
             </el-col>
         </el-row>
     </div>

@@ -4,6 +4,7 @@
         <img src="@/assets/hospital.jpeg" class="layoutImage"/>
         <span>今天预约挂号总人数：{{orderPeople}}</span>
       </div> -->
+<!--      图片1-->
         <div class="indexPeople">
             <div class="userImage">
                 <i class="iconfont icon-r-user2" style="font-size: 132px"></i>
@@ -18,6 +19,7 @@
                 </div>
             </div>
         </div>
+<!--      图片2-->
         <div class="indexPeople">
             <div class="userImage">
                 <i class="iconfont icon-r-home" style="font-size: 132px"></i>
@@ -35,7 +37,7 @@
 
         <el-row>
             <el-col :span="24">
-                <img src="@/assets/back.jpg" style="width: 941px;margin-left: 25px;">
+                <img src="@/assets/back_img.png" style="width: 941px;margin-left: 25px;">
             </el-col>
         </el-row>
     </div>
