@@ -1,3 +1,4 @@
+//定义了一个名为 OrderServiceImpl 的Java类，实现了 OrderService 接口，用于处理医院系统中的挂号信息管理
 package com.rabbiter.hospital.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,17 +19,20 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 
-@Service("OrderService")
-public class OrderServiceImpl implements OrderService {
+@Service("OrderService") // 标识这个类为一个服务组件，Spring容器会自动处理其生命周期
+public class OrderServiceImpl implements OrderService { // 这是一个服务实现类，实现了 OrderService 接口
 
+    //@Resource 和 @Autowired 注解用来自动注入依赖
     @Resource
-    private OrderMapper orderMapper;
+    private OrderMapper orderMapper;// 注入了 OrderMapper（用于数据库操作）
     @Autowired
-    private JedisPool jedisPool;//redis连接池
+    private JedisPool jedisPool;//注入了JedisPool（Redis连接池）
     /**
      * 分页模糊查询所有挂号信息
      */
     @Override
+    //使用 Page 和 QueryWrapper 来执行带有分页和条件的查询
+    //返回包含总条数、总页数、当前页和查询记录的 HashMap
     public HashMap<String, Object> findAllOrders(int pageNumber, int size, String query) {
         Page<Orders> page = new Page<>(pageNumber, size);
         QueryWrapper<Orders> wrapper = new QueryWrapper<>();
@@ -43,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 删除挂号信息
+     * 根据挂号ID (oId) 删除记录
      */
     @Override
     public Boolean deleteOrder(int oId) {
@@ -51,18 +55,19 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
     /**
-     * 增加挂号信息
+     * 使用 Jedis 操作 Redis 进行时间段的库存检查和减少
+     * 插入新的挂号记录到数据库
      */
     @Override
     public Boolean addOrder(Orders order, String arId){
         //redis开始
         Jedis jedis = jedisPool.getResource();
-        String time = order.getOStart().substring(11, 22);
+        String time = order.getOStart().substring(11, 22);//2024-08-27-08:30-09:30
         synchronized (this) {
             if (time.equals("08:30-09:30")) {
-                if (jedis.hget(arId, "eTOn").equals("0"))
-                    return false;
-                jedis.hincrBy(arId, "eTOn", -1);
+                if (jedis.hget(arId, "eTOn").equals("0"))//对于不同的时间段，使用 jedis.hget(arId, "timeSlot") 检查对应时间段的挂号可用数量（存储在 Redis 的哈希表中）
+                    return false;//如果可用数量为 "0"（即已满），则返回 false，表示添加订单失败
+                jedis.hincrBy(arId, "eTOn", -1);//如果还有剩余，则使用 jedis.hincrBy(arId, "timeSlot", -1) 将该时间段的可用数量减一，即预订一个挂号名额
             }
 
             if (time.equals("09:30-10:30")) {

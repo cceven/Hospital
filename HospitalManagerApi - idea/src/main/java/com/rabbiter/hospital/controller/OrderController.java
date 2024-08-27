@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-@RestController
-@RequestMapping("order")
+@RestController// 表明该类是一个控制器，它会处理 HTTP 请求并返回 JSON 或 XML 格式的响应
+@RequestMapping("order")// 指定该控制器处理所有以 /order 开头的请求
 public class OrderController {
-    @Autowired
+    @Autowired  //使用依赖注入的方式将 OrderService 注入到 OrderController 中，OrderService 是处理订单相关业务逻辑的服务类
     private OrderService orderService;
     /**
      * 根据id更新挂号信息
      */
-    @PostMapping("updateOrder")
+    @PostMapping("updateOrder")// 处理 /order/updateOrder 的 POST 请求
     @ResponseBody
-    public ResponseData updateOrder(@RequestBody Orders orders) {
-        if (this.orderService.updateOrder(orders))
+    public ResponseData updateOrder(@RequestBody Orders orders) { //@RequestBody Orders orders：从请求体中获取一个 Orders 对象，用于更新订单
+        if (this.orderService.updateOrder(orders)) // 调用 OrderService 的 updateOrder 方法更新订单信息，并根据结果返回成功或失败的响应
             return ResponseData.success("更新挂号信息成功");
 
         return ResponseData.fail("更新挂号信息失败！");
@@ -28,8 +28,8 @@ public class OrderController {
     /**
      * 根据id设置缴费状态
      */
-    @RequestMapping("updatePrice")
-    public ResponseData updatePrice(int oId){
+    @RequestMapping("updatePrice") // 处理 /order/updatePrice 请求
+    public ResponseData updatePrice(int oId){ // 根据订单 ID (oId) 设置订单的缴费状态
         if (this.orderService.updatePrice(oId))
         return ResponseData.success("根据id设置缴费状态成功");
         return ResponseData.success("根据id设置缴费状态失败");
@@ -37,29 +37,29 @@ public class OrderController {
     /**
      * 查找医生已完成的挂号单
      */
-    @RequestMapping("findOrderFinish")
-    public ResponseData findOrderFinish(int pageNumber, int size, String query, int dId){
+    @RequestMapping("findOrderFinish") // 处理 /order/findOrderFinish 请求
+    public ResponseData findOrderFinish(int pageNumber, int size, String query, int dId){ // 分页查询指定医生的已完成挂号单
         return ResponseData.success("查找医生已完成的挂号单完成！", this.orderService.findOrderFinish(pageNumber, size, query, dId));
     }
     /**
      * 根据dId查询挂号
      */
-    @RequestMapping("findOrderByDid")
-    public ResponseData findOrderByDid(int pageNumber, int size, String query, int dId){
+    @RequestMapping("findOrderByDid") // 处理 /order/findOrderByDid 请求
+    public ResponseData findOrderByDid(int pageNumber, int size, String query, int dId){ // 分页查询指定医生的挂号信息
         return ResponseData.success("返回挂号信息成功", this.orderService.findOrderByDid(pageNumber, size, query, dId)) ;
     }
     /**
      * 统计今天挂号人数
      */
-    @RequestMapping("orderPeople")
-    public ResponseData oderPeople(){
+    @RequestMapping("orderPeople") // 处理 /order/orderPeople 请求
+    public ResponseData oderPeople(){ // 统计当天的挂号人数
         String oStart = TodayUtil.getTodayYmd();
         return ResponseData.success("统计今天挂号人数成功", this.orderService.orderPeople(oStart));
     }
     /**
      * 统计今天某个医生挂号人数
      */
-    @RequestMapping("orderPeopleByDid")
+    @RequestMapping("orderPeopleByDid") // 处理 /order/orderPeopleByDid 请求
     public ResponseData orderPeopleByDid(int dId){
         String oStart = TodayUtil.getTodayYmd();
         return ResponseData.success("统计今天挂号人数成功", this.orderService.orderPeopleByDid(oStart, dId));

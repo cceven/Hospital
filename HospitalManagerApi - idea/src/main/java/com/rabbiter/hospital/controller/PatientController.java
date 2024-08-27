@@ -1,3 +1,6 @@
+/*用于处理与患者相关的HTTP请求。
+这个控制器类提供了一些API接口，供客户端进行
+患者登录、查询医生信息、添加挂号信息、查询挂号、添加患者信息、生成PDF文件以及统计患者年龄分布等操作*/
 package com.rabbiter.hospital.controller;
 
 import com.rabbiter.hospital.mapper.OrderMapper;
@@ -19,11 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
-@RequestMapping("patient")
+@RestController//这是一个组合注解，相当于@Controller和@ResponseBody的结合，表示这个类的所有方法都会返回数据而不是视图
+@RequestMapping("patient")//将该控制器映射到/patient路径下，所有的方法将会根据具体的URL路径和HTTP方法来映射对应的请求
 public class PatientController {
 
-    @Autowired
+    @Autowired//用于自动注入DoctorService、PatientService、OrderService和JedisPool对象，这些服务类和Redis连接池是通过Spring容器管理的
     private DoctorService doctorService;
     @Autowired
     private PatientService patientService;
@@ -35,7 +38,9 @@ public class PatientController {
     private OrderMapper orderMapper;
 
     /**
-     * 登录数据验证
+     * 该方法用于验证患者的登录信息。
+     * 接收 pId 和 pPassword 参数，并调用 PatientService 的 login 方法进行验证。
+     * 如果登录成功，生成一个 JWT Token 并返回给客户端；否则返回失败消息
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @ResponseBody
@@ -56,6 +61,7 @@ public class PatientController {
     }
     /**
      * 根据科室查询所有医生信息
+     * 该方法接收科室名称 dSection 作为参数，并调用 DoctorService 的 findDoctorBySection 方法获取医生信息
      */
     @RequestMapping("findDoctorBySection")
     public ResponseData findDoctorBySection(@RequestParam(value = "dSection") String dSection){
@@ -63,10 +69,12 @@ public class PatientController {
     }
     /**
      * 增加挂号信息
+     * 该方法接收挂号信息（Orders 对象）和预约 ID（arId），
+     * 调用 OrderService 的 addOrder 方法来添加挂号信息，并返回操作结果
      */
-    @RequestMapping("addOrder")
+    @RequestMapping("addOrder")//映射到/patient/addOrder路径，接受POST请求
     @ResponseBody
-    public ResponseData addOrder(Orders order, String arId){
+    public ResponseData addOrder(Orders order, String arId){//方法接收挂号信息（Orders对象）和一个预约ID（arId），调用OrderService的addOrder方法来添加挂号信息，并返回操作结果
         System.out.println(arId);
         if (this.orderService.addOrder(order, arId))
         return ResponseData.success("插入挂号信息成功");
@@ -74,6 +82,7 @@ public class PatientController {
     }
     /**
      * 根据pId查询挂号
+     * 该方法接收患者 ID pId 作为参数，调用 OrderService 的 findOrderByPid 方法查询挂号信息
      */
     @RequestMapping("findOrderByPid")
     public ResponseData findOrderByPid(@RequestParam(value = "pId") int pId){
@@ -82,6 +91,7 @@ public class PatientController {
 
     /**
      * 增加患者信息
+     * 该方法接收一个 Patient 对象，调用 PatientService 的 addPatient 方法将患者信息插入数据库，并返回操作结果
      */
     @RequestMapping("addPatient")
     @ResponseBody
