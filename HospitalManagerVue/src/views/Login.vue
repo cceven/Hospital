@@ -7,7 +7,6 @@
 
             <div style="
                     font-weight: 700;
-                    color
                     top: 40px;
                     font-size: 28px;
                     left: 20px;
@@ -32,15 +31,15 @@
                 <el-form-item class="role">
                     <el-radio-group v-model="role" size="small">
                         <el-radio label="患者"></el-radio>
-                        <el-radio label="医生"></el-radio>
+                        <el-radio label="医生" ></el-radio>
                         <el-radio label="管理员"></el-radio>
                     </el-radio-group>
                 </el-form-item>
 
                 <el-form-item class="btns">
-                    <el-button type="primary" style="font-size: 22px; margin-left: 15px; background-color: #409ffc;" @click="submitLoginForm('ruleForm')">
+                    <el-button class="btns-left" type="primary" style="font-size: 22px; margin-left: 15px; background-color: #409ffc;" @click="submitLoginForm('ruleForm')">
                         登录</el-button>
-                    <el-button type="info" style="font-size: 22px; margin-left: 85px; background-color: #409ffc;" @click="registerFormVisible = true">
+                    <el-button class="btns-right" type="info" style="font-size: 22px; margin-left: 85px; background-color: #409ffc;" @click="registerFormVisible = true">
                         注册新账号</el-button>
                 </el-form-item>
             </el-form>
@@ -95,7 +94,7 @@ import { setToken } from "@/utils/storage.js";
 export default {
     name: "Login",
     data() {
-        var validateMoblie = (rule, value, callback) => {
+        var validateMoblie = (rule, value, callback) => {/*手机号验证函数*/
             if (value === undefined) {
                 callback(new Error("请输入手机号"));
             } else {
@@ -107,7 +106,8 @@ export default {
                 callback();
             }
         };
-        var validateCard = (rule, value, callback) => {
+
+        var validateCard = (rule, value, callback) => {/*用于验证身份证号码*/
             if (value === undefined) {
                 callback(new Error("请输入身份证号"));
             } else {
@@ -118,7 +118,8 @@ export default {
                 callback();
             }
         };
-        var validatePass = (rule, value, callback) => {
+
+        var validatePass = (rule, value, callback) => {/*用于验证密码是否为空，并在验证通过时重新验证“确认密码”字段*/
             if (value === "") {
                 callback(new Error("请输入密码"));
             } else {
@@ -128,7 +129,7 @@ export default {
                 callback();
             }
         };
-        var validatePass2 = (rule, value, callback) => {
+        var validatePass2 = (rule, value, callback) => {/*用于验证两次输入的密码是否一致。*/
             if (value === "") {
                 callback(new Error("请再次输入密码"));
             } else if (value !== this.findForm.newPassword) {
@@ -137,11 +138,12 @@ export default {
                 callback();
             }
         };
+
         return {
             //背景图片
             backgroundDiv: {
                 backgroundImage:
-                    "url(" + require("../assets/doctor.jpeg") + ")",
+                    "url(" + require("../assets/R-C.png") + ")",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "100% 100%",
             },
@@ -149,17 +151,11 @@ export default {
                 id: "",
                 password: "",
             },
-            loginRules: {
+            loginRules: {/*定义了表单验证规则*/
                 id: [
                     {
                         required: true,
-                        message: "请输入账号编号",
-                        trigger: "blur",
-                    },
-                    {
-                        min: 3,
-                        max: 50,
-                        message: "长度在 3到 50 个字符",
+                        message: "请输入账号",
                         trigger: "blur",
                     },
                 ],
@@ -169,6 +165,7 @@ export default {
             },
             role: "患者",
             findRole: "患者",
+
             //找回密码
             findFormVisible: false,
             findForm: {
@@ -204,6 +201,7 @@ export default {
             totalTime: 60,
             content: "发送验证码",
             canClick: true,
+
             //注册
             registerFormVisible: false,
             registerForm: {
@@ -217,6 +215,11 @@ export default {
                         message: "账号必须数字类型",
                         trigger: "blur",
                     },
+                  {
+                    pattern: /^\d{8,8}$/,
+                    message: "账号必须为8位数字",
+                    trigger: "blur",
+                  },
                 ],
                 pPassword: [
                     { required: true, message: "请输入密码", trigger: "blur" },
@@ -454,7 +457,7 @@ export default {
     box-shadow: 0 1px 10px rgba(0, 0, 0, .5), 0 1px 10px rgba(0, 0, 0, .3);
     opacity: 0.9;
     width: 450px;
-    height: 390px;
+    height: 360px;
     background:#f2f9ff;
     //绝对定位，相对于最左上角来说
     position: absolute;
@@ -502,6 +505,7 @@ export default {
 .btns {
     justify-content: flex-end;
     height: 25px;
+  margin: 26px 26px;
 }
 
 //自己修改
@@ -510,5 +514,9 @@ export default {
   height: 100%;
   object-fit: contain;
   margin: 100px auto;
+}
+.btns-right:hover, .btns-left:hover{
+  transform: scale(1.1);
+  transition: 0.2s;
 }
 </style>

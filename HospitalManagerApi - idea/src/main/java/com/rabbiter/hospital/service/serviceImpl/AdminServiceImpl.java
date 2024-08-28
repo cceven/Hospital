@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 public class AdminServiceImpl implements AdminService {
 
     @Resource
-    private AdminMapper adminMapper;
+    private AdminMapper adminMapper;/*将AdminMapper的实例注入到AdminServiceImpl类中*/
 
     /**
      * 登录数据校验

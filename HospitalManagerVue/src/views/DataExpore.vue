@@ -4,20 +4,20 @@
     <div id="orderSection" style="width: 1200px; height: 400px;"></div>
     <div id="orderGender" style="width: 540px; height: 500px;float:left"></div>
     <div id="patientAge" style="width: 600px; height: 500px;float:right"></div>
-
-
   </div>
 </template>
+
 <script>
 import request from "@/utils/request.js";
 export default {
   name: "dataExpore",
   data() {
     return {
-      sevenDate: [],
-      sevenOrder: [],
+      sevenDate: [],/*保存过去x天的日期，用于折线图的X轴数据*/
+      sevenOrder: [],/*用于保存过去x天的挂号人数数据。*/
     };
   },
+
   methods: {
     //统计患者年龄分布
     patientAge() {
@@ -76,18 +76,14 @@ export default {
               }
             ]
           };
-
-
-
           // 使用刚指定的配置项和数据显示图表。
           myChart.setOption(option);
-
-
         })
         .catch(err => {
           console.error(err);
         })
     },
+
     //统计挂号科室人数
     orderSection() {
       var myChart = this.$echarts.init(document.getElementById("orderSection"));
@@ -123,12 +119,12 @@ export default {
           };
           // 使用刚指定的配置项和数据显示图表。
           myChart.setOption(option);
-
         })
         .catch(err => {
           console.error(err);
         })
     },
+
     //挂号男女比例
     orderGender() {
       var myChart = this.$echarts.init(document.getElementById("orderGender"));
@@ -173,9 +169,8 @@ export default {
         .catch(err => {
           console.error(err);
         });
-
-
     },
+
     //获取过去num天日期
     pastSeven(num) {
       var date = new Date();
@@ -183,6 +178,7 @@ export default {
       var time = date.getMonth() + 1 + "-" + date.getDate();
       return time;
     },
+
     //挂号人数图表
     orderPeople() {
       var myChart = this.$echarts.init(document.getElementById("orderPeople"));
@@ -212,12 +208,19 @@ export default {
           };
           // 使用刚指定的配置项和数据显示图表。
           myChart.setOption(option);
+          // 监听图表的点击事件
+          myChart.on("click", function (params) {
+            // 获取被点击的点的值
+            const value = params.value;
+            alert(`您点击的点的值是: ${value}`);
+          });
         })
         .catch((err) => {
           console.error(err);
         });
     },
   },
+
   mounted() {
     this.orderPeople();
     this.orderGender();
@@ -225,8 +228,8 @@ export default {
     this.patientAge();
   },
   created() {
-    //获取过去7天日期
-    for (var i = 20; i > 0; i--) {
+    //获取过去日期
+    for (var i = 10; i >= -10; i--) {
       this.sevenDate.push(this.pastSeven(i));
     }
   },

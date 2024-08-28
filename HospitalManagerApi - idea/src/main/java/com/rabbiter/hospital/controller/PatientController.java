@@ -102,6 +102,8 @@ public class PatientController {
         }
         return ResponseData.fail("注册失败！账号或邮箱已被占用");
     }
+    /*生成PDF文件
+    该方法根据挂号订单 ID (oId) 查询订单信息，并调用 PdfUtil.ExportPdf 方法生成 PDF 文件，返回给客户端*/
     @GetMapping("/pdf")
     public void downloadPDF(HttpServletRequest request, HttpServletResponse response, int oId) throws Exception {
         Orders order = this.orderMapper.findOrderByOid(oId);
@@ -109,6 +111,7 @@ public class PatientController {
     }
     /**
      * 统计患者男女人数
+     * 该方法调用 PatientService 的 patientAge 方法，统计患者的男女人数，并将结果返回给客户端
      */
     @RequestMapping("patientAge")
     public ResponseData patientAge(){

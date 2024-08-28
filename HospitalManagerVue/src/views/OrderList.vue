@@ -133,6 +133,7 @@ export default {
             total: 3,
         };
     },
+
     methods: {
         //点击缴费按钮
         priceClick(oId, dId) {
@@ -151,6 +152,7 @@ export default {
                     this.requestOrders();
                 });
         },
+
         //删除挂号操作
         deleteOrder(id) {
             request
@@ -185,6 +187,7 @@ export default {
                     });
                 });
         },
+
         //页面大小改变时触发
         handleSizeChange(size) {
             this.size = size;
@@ -196,6 +199,7 @@ export default {
             this.pageNumber = num;
             this.requestOrders();
         },
+
         // 加载订单列表
         requestOrders() {
             request
@@ -218,6 +222,7 @@ export default {
     },
 };
 </script>
+
 <style scoped lang="scss">
 .el-table {
     margin-top: 20px;

@@ -22,15 +22,16 @@
     <!--    1. 不需要parameterType参数-->
     <!--    2. mapper文件用注解@Param注解参数名-->
     <!--    3. xml文件要使用2中的参数名-->
+    <!--查询计算特定日期的挂号数-->
     <select id="orderPeople" resultType="Integer" parameterType="String">
         select count(p_id) as countGender from orders where o_start like #{o_start}"%"
     </select>
-
+    <!--查询某个医生某个日期的挂号数量-->
     <select id="orderPeopleByDid" resultType="Integer">
         select count(p_id) from orders where o_start like #{o_start}"%" and d_id=#{d_id}
     </select>
 
-
+    <!--SQL 联合查询 patient 和 orders 表，按性别分组统计-->
     <select id="orderGender" resultMap="orderPatientMap">
         select p_gender,count(p_gender) as countGender from patient p,orders o  where p.p_id=o.p_id GROUP BY p_gender
     </select>
@@ -58,10 +59,14 @@
             <result property="pAge" column="p_age"/>
         </association>
     </resultMap>
+
     <select id="findOrderByOid" resultMap="orderOidMap">
         select * from orders o,patient p where o.p_id = p.p_id and o.o_id=#{o_id}
     </select>
 
+
+    <!--更新 orders 表的多个字段，例如 o_check, o_drug 等。
+    使用 concat 函数拼接字符串，适用于更新医嘱或药物信息-->
     <update id="updateOrderByAdd" parameterType="com.rabbiter.hospital.pojo.Orders">
         update orders set o_check = concat(o_check,#{oCheck}),o_drug = concat(o_drug,#{oDrug}),o_total_price = #{oTotalPrice},o_advice = #{oAdvice} where o_id=#{oId}
     </update>

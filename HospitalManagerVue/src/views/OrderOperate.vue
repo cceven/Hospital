@@ -158,10 +158,10 @@ export default {
         },
     },
     mounted() {
-      
     }
 };
 </script>
+
 <style scoped lang="scss">
 ul li {
     display: inline;

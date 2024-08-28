@@ -115,7 +115,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="密码" label-width="80px">
+                <el-form-item label="密码" label-width="80px" prop="dPassword">
                     <el-input
                         v-model="addForm.dPassword"
                         autocomplete="off"
@@ -175,7 +175,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="挂号费" label-width="80px" prop="dPrice">
+                <el-form-item label="挂号费/元" label-width="90px" prop="dPrice">
                     <el-input
                         v-model="addForm.dPrice"
                         autocomplete="off"
@@ -283,7 +283,7 @@
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="挂号费" label-width="80px" prop="dPrice">
+                <el-form-item label="挂号费/元" label-width="90px" prop="dPrice">
                     <el-input
                         v-model="modifyForm.dPrice"
                         autocomplete="off"
@@ -330,24 +330,26 @@ export default {
                 callback(new Error("请输入手机号"));
             } else {
                 let reg =
-                    /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
+                    /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;/*正则表达式验证*/
                 if (!reg.test(value)) {
                     callback(new Error("请输入合法的手机号"));
                 }
                 callback();
             }
         };
+
         var validateCard = (rule, value, callback) => {
             if (value === undefined) {
                 callback(new Error("请输入身份证号"));
             } else {
-                let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+                let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;/*正则表达式验证*/
                 if (!reg.test(value)) {
                     callback(new Error("请输入合法的身份证号码"));
                 }
                 callback();
             }
         };
+
         return {
             //文件上传
             fileList: [],
@@ -358,7 +360,7 @@ export default {
             total: 3,
             addFormVisible: false,
             addForm: {
-                dPassword: 123456,
+                dPassword: "",
                 dGender: "男",
             },
             posts: ["主任医师", "副主任医师", "主治医生"],
@@ -385,6 +387,7 @@ export default {
                 "皮肤病科",
                 "口腔科",
             ],
+
             rules: {
                 dId: [
                     { required: true, message: "请输入账号", trigger: "blur" },
@@ -393,21 +396,21 @@ export default {
                         message: "账号必须数字类型",
                         trigger: "blur",
                     },
+                  {
+                    pattern: /^\d{8,8}$/,
+                    message: "账号长度必须为8位",
+                    trigger: "blur",
+                  },
                 ],
               dPassword: [
                 { required: true, message: "请输入密码", trigger: "blur" },
-                {
-                  type: "number",
-                  message: "账号必须数字类型",
-                  trigger: "blur",
-                },
               ],
                 dName: [
                     { required: true, message: "请输入姓名", trigger: "blur" },
                     {
                         min: 2,
                         max: 5,
-                        message: "账号必须是2到5个字符",
+                        message: "姓名必须是2到5个字符",
                         trigger: "blur",
                     },
                 ],
@@ -441,7 +444,7 @@ export default {
                 dIntroduction: [
                     {
                         required: true,
-                        message: "请输入您的个人简介",
+                        message: "请输入医生的个人简介",
                         trigger: "blur",
                     },
                 ],
@@ -472,6 +475,7 @@ export default {
         handleExceed() {
             this.$message.warning("当前限制选择 1 个文件");
         },
+
         //点击修改医生信息
         modifyDoctor(formName) {
             this.$refs[formName].validate((valid) => {
@@ -534,6 +538,7 @@ export default {
                     console.log(res);
                 });
         },
+
         //删除对话框
         deleteDialog(id) {
             this.$confirm("此操作将删除该医生信息, 是否继续?", "提示", {
@@ -555,10 +560,9 @@ export default {
                     });
                 });
         },
+
         // 增加医生
         addDoctor(formName) {
-        
-            
             if (!/^\d+$/.test(this.addForm.dId)) {
                 this.$message.error("账号有误，只能是纯数字，且长度不能超过9位。");
                 return;

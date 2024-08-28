@@ -288,6 +288,7 @@ export default {
           console.error(err);
         });
     },
+
     //封装数据
     dataPackage() {
       let oDrug = "";
@@ -316,6 +317,7 @@ export default {
       oTotalPrice = this.checkTotalPrice + this.drugTotalPrice;
       return { oId, oRecord, oDrug, oCheck, oTotalPrice };
     },
+
     //点击病因保存按钮
     holdReason() {
       this.reasonFormVisible = false;

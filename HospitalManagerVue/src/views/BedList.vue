@@ -116,10 +116,16 @@ export default {
                         message: "床号必须数字类型",
                         trigger: "blur",
                     },
+                  {
+                    pattern: /^\d{4,4}$/,
+                    message: "床号长度必须为4位",
+                    trigger: "blur",
+                  },
                 ],
             },
         };
     },
+
     methods: {
         //清空床位操作
         emptyBed(id) {
@@ -190,9 +196,10 @@ export default {
                     });
                 });
         },
+
         //点击增加确认按钮
         addBed(formName) {
-            this.$refs[formName].validate((valid) => {
+            this.$refs[formName].validate((valid) => {/*触发表单的验证规则，并根据验证结果决定是否继续后续操作*/
                 if (valid) {
                     request
                         .get("bed/addBed", {

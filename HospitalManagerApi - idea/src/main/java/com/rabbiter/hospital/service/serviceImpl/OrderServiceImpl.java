@@ -231,20 +231,20 @@ public class OrderServiceImpl implements OrderService { // 这是一个服务实
 
         if(map == null) {
             map = new HashMap<>();
-            map.put("tTOe", "40");
-            map.put("nTOt", "40");
-            map.put("sTOs", "40");
-            map.put("eTOn", "40");
-            map.put("fTOf", "40");
-            map.put("fTOs", "40");
+            map.put("tTOe", "10");
+            map.put("nTOt", "10");
+            map.put("sTOs", "10");
+            map.put("eTOn", "10");
+            map.put("fTOf", "10");
+            map.put("fTOs", "10");
         }
 
-        map.putIfAbsent("tTOe", "40");
-        map.putIfAbsent("nTOt", "40");
-        map.putIfAbsent("sTOs", "40");
-        map.putIfAbsent("eTOn", "40");
-        map.putIfAbsent("fTOf", "40");
-        map.putIfAbsent("fTOs", "40");
+        map.putIfAbsent("tTOe", "10");
+        map.putIfAbsent("nTOt", "10");
+        map.putIfAbsent("sTOs", "10");
+        map.putIfAbsent("eTOn", "10");
+        map.putIfAbsent("fTOf", "10");
+        map.putIfAbsent("fTOs", "10");
 
         jedis.hmset(arId, map);
         jedis.expire(arId, 604800);

@@ -155,11 +155,13 @@ export default {
                     this.starVisible = false;
                 });
         },
+
         //查看报告单
         seeReport(id) {
             window.location.href =
-                "http://localhost:81/patient/pdf?oId=" + id;
+                "http://localhost:8082/patient/pdf?oId=" + id;
         },
+
         //点击缴费按钮
         priceClick(oId, dId) {
             request
@@ -190,6 +192,7 @@ export default {
                     this.requestOrder();
                 });
         },
+
         //请求挂号信息
         requestOrder() {
             request
@@ -202,13 +205,12 @@ export default {
                     if (res.data.status !== 200)
                         this.$message.error("请求数据失败");
                     this.orderData = res.data.data;
-                    //this.orderData.dSection = res.data.data.map(item => item.doctor.dSection);
-                    //console.log(res.data.data.map(item => item.doctor.dSection));
                     console.log(this.orderData.oId);
                     console.log(this.orderData.pName);
                     console.log(res);
                 });
         },
+
         //token解码
         tokenDecode(token) {
             if (token !== null) return jwtDecode(token);
@@ -216,11 +218,8 @@ export default {
     },
     created() {
         // 解码token
-        //this.orderData.pName = this.tokenDecode(getToken()).pName;
-        //this.orderData.pCard = this.tokenDecode(getToken()).pCard;
         this.userId = this.tokenDecode(getToken()).pId;
         console.log(this.orderData.pName);
-        //this.orderData.pName = "dasda"
         this.requestOrder();
     },
 };

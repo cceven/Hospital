@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!-- 标签定义了一个命名空间，与 Mapper 接口的完整类名匹配。
+有助于 MyBatis 知道这个映射文件是为哪个 Mapper 接口服务的-->
 <mapper namespace="com.rabbiter.hospital.mapper.ArrangeMapper">
     <!--定义封装account和user的resultMap-->
-    <resultMap id="arrangeDoctorMap" type="com.rabbiter.hospital.pojo.Arrange">
-        <id property="arId" column="ar_id" />
+    <resultMap id="arrangeDoctorMap" type="com.rabbiter.hospital.pojo.Arrange"><!--定义了一个结果映射，它是从数据库结果集到 Java 对象的映射规则-->
+        <id property="arId" column="ar_id" /><!--定义了主键字段的映射，property 是 Java 对象的属性，column 是数据库表的列名-->
+        <!--<result> 标签定义了其他普通字段的映-->
         <result property="arTime" column="ar_time" />
         <result property="dId" column="d_id" />
         <!--一对一的关系映射，配置封装user的内容 column中指名从表的外键 property="user"指的是单个实体类的引用-->
-        <association property="doctor" javaType="com.rabbiter.hospital.pojo.Doctor">
+        <association property="doctor" javaType="com.rabbiter.hospital.pojo.Doctor"><!--<association> 定义了复杂类型的一对一关系映射，这里是 Arrange 类包含一个 Doctor 对象-->
             <result property="dId" column="d_id" />
             <result property="dName" column="d_name"/>
             <result property="dGender" column="d_gender"/>
@@ -22,12 +24,13 @@
     </resultMap>
 
     <!--IAccountDao的查询所有-->
-    <select id="findByTime" resultMap="arrangeDoctorMap">
+    <select id="findByTime" resultMap="arrangeDoctorMap">/*查询结果的行应该按照 arrangeDoctorMap 中定义的映射规则来处理*/
         select * from doctor d,arrange a where d.d_id=a.d_id and a.ar_time=#{ar_time} and d.d_section=#{d_section}
     </select>
 <!--传入多个参数-->
 <!--    1. 不需要parameterType参数-->
 <!--    2. mapper文件用注解@Param注解参数名-->
 <!--    3. xml文件要使用2中的参数名-->
-
+<!--    这个映射文件主要用于处理医院预约排班数据，将数据库查询结果映射到 Java 的 Arrange 对象中，
+同时处理与 Doctor 对象的关联。-->
 </mapper>

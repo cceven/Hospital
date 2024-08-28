@@ -130,7 +130,7 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("来晚了...该床位已被占用");
+                        return this.$message.error("该床位已被占用");
                     this.BedFormVisible = false;
                     this.$message.success("申请住院成功！");
                     this.requestOrders();

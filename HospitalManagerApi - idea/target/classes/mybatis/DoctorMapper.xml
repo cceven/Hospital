@@ -6,6 +6,11 @@
     <select id="findDoctorBySection" resultType="com.rabbiter.hospital.pojo.Doctor" parameterType="String">
         select d_id,d_name,d_gender,d_post,d_section,d_introduction,d_price,d_avg_star from doctor where d_section=#{d_section} and d_state=1
     </select>
+    <!--更新评价-->
+<!--d_people字段递增1，表示又有一个患者评价了该医生。
+    d_star字段增加由参数#{dStar}指定的值，累计医生收到的总评星。
+    d_avg_star字段更新为d_star除以d_people，计算平均评星。
+    根据医生的ID（d_id），找到对应的记录进行更新-->
     <update id="updateStar">
         update doctor set d_people = d_people+1,d_star = d_star+#{dStar},d_avg_star=d_star/d_people where d_id = #{dId}
     </update>

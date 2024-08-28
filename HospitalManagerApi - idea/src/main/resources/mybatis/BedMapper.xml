@@ -7,5 +7,6 @@
         select count(b_id) from bed where b_start = #{b_start}
     </select>
 
-
 </mapper>
+<!--这个映射文件定义了一个名为 bedPeople 的查询，
+它从 bed 表中计算 b_id 的数量，条件是 b_start 列的值等于给定的参数。查询结果是一个整数值 (Integer)-->

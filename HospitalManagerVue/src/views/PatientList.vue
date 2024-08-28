@@ -88,6 +88,7 @@ export default {
                     console.log(res);
                 });
         },
+
         //删除对话框
         deleteDialog(id) {
             this.$confirm("此操作将删除该患者信息, 是否继续?", "提示", {
@@ -109,6 +110,7 @@ export default {
                     });
                 });
         },
+
         //页面大小改变时触发
         handleSizeChange(size) {
             this.size = size;
@@ -120,6 +122,7 @@ export default {
             this.pageNumber = num;
             this.requestPatients();
         },
+
         // 加载患者列表
         requestPatients() {
             request
@@ -132,7 +135,6 @@ export default {
                 })
                 .then((res) => {
                     this.patientData = res.data.data.patients;
-
                     this.total = res.data.data.total;
                     
                 });

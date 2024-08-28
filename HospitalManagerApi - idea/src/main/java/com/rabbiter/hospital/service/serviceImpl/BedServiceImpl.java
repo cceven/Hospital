@@ -19,7 +19,7 @@ import java.util.List;
 public class BedServiceImpl implements BedService {
 
     @Resource
-    private BedMapper bedMapper;
+    private BedMapper bedMapper;//自动注入 BedMapper，用于执行与床位相关的数据库操作
 
     /**
      * 查找所有空床位
@@ -27,25 +27,23 @@ public class BedServiceImpl implements BedService {
     @Override
     public List<Bed> findNullBed(){
         QueryWrapper<Bed> wrapper = new QueryWrapper<>();
-        wrapper.select("b_id").eq("b_state", 0);
+        wrapper.select("b_id").eq("b_state", 0);//查找所有空床位（即状态为 b_state = 0 的床位）
         return this.bedMapper.selectList(wrapper);
     }
 
-    /**
-     * 增加床位信息
-     */
     @Override
     /**
      * 更新床位信息
      */
     public Boolean updateBed(Bed bed){
         Bed bed1 = this.bedMapper.selectById(bed.getBId());
-        if (bed1.getBState() == 1)
+        if (bed1.getBState() == 1)//如果床位已被占用（b_state = 1），则返回 false
             return false;
+        //更新床位的开始日期、状态和版本号
         bed.setBStart(TodayUtil.getTodayYmd());
         bed.setBState(1);
         bed.setVersion(bed1.getVersion());
-
+        //将修改后的床位信息保存到数据库中
         this.bedMapper.updateById(bed);
         return true;
     }
@@ -59,6 +57,9 @@ public class BedServiceImpl implements BedService {
     }
     /**
      * 分页模糊查询所有检查信息
+     * int pageNumber: 当前页码，决定从哪一页开始查询。
+     * int size: 每页显示的记录数。
+     * String query: 查询条件，用于模糊匹配 p_id（病人 ID）。
      */
     @Override
     public HashMap<String, Object> findAllBeds(int pageNumber, int size, String query) {
@@ -86,13 +87,13 @@ public class BedServiceImpl implements BedService {
     @Override
     public Boolean addBed(Bed bed){
         //如果账号已存在则返回false
-        List<Bed> beds = this.bedMapper.selectList(null);
-        for (Bed bed1 : beds) {
+        List<Bed> beds = this.bedMapper.selectList(null);//使用 bedMapper 的 selectList(null) 方法从数据库中获取所有的床位记录，并将这些记录存储在一个 List<Bed> 中。
+        for (Bed bed1 : beds) {//遍历 beds 列表，检查新添加的床位 bed 的 ID 是否与已有床位的 ID 重复。如果找到相同的 bId，则返回 false，表示床位已经存在，无法添加
             if (bed1.getBId() == bed.getBId()) {
                 return false;
             }
         }
-        bed.setBState(0);
+        bed.setBState(0);//将新床位的状态设置为 0，表示该床位是空闲的
         this.bedMapper.insert(bed);
         return true;
     }
@@ -115,7 +116,7 @@ public class BedServiceImpl implements BedService {
 
     }
     /**
-     * 统计今天挂号人数
+     * 统计今天住院人数
      */
     @Override
     public int bedPeople(String bStart){

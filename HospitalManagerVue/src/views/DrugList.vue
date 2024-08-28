@@ -187,7 +187,7 @@ export default {
                     {
                         min: 1,
                         max: 50,
-                        message: "账号必须是1到50个字符",
+                        message: "名称必须是1到50个字符",
                         trigger: "blur",
                     },
                 ],
@@ -206,7 +206,7 @@ export default {
                     {
                         min: 1,
                         max: 50,
-                        message: "账号必须是1到50个字符",
+                        message: "出版商必须是1到50个字符",
                         trigger: "blur",
                     },
                 ],
@@ -350,7 +350,6 @@ export default {
                 .then((res) => {
                     this.drugData = res.data.data.drugs;
                     this.total = res.data.data.total;
-                    
                 });
         },
     },

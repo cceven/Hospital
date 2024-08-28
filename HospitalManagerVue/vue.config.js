@@ -1,8 +1,3 @@
-/*
- * @Description: 
-
- * @Date: 2023-01-14 20:02:29
- */
 module.exports = {
     lintOnSave: false, // 关闭eslint校验
     devServer: {

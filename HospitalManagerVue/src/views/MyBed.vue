@@ -23,6 +23,7 @@ export default {
             userId:1,
         }
     },
+
     methods: {
         //请求病床信息
         requestBed(){

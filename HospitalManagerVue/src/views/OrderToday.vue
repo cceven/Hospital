@@ -43,7 +43,7 @@ export default {
             userName: "dada",
             today: "",
 
-            orderData: [],
+            orderData: [],/*挂号信息*/
         };
     },
     methods: {

@@ -108,6 +108,7 @@
         </el-dialog>
     </div>
 </template>
+
 <script>
 import request from "@/utils/request.js";
 
@@ -117,11 +118,11 @@ export default {
         return {
             pageNumber: 1,
             size: 8,
-            query: "",
+            query: "",/*查询条件，默认为空字符串*/
             checkData: [],
             total: 3,
             addFormVisible: false,
-            addForm: {},
+            addForm: {},/*存储新检查项目的数据*/
             rules: {
                 chId: [
                     { required: true, message: "请输入编号", trigger: "blur" },
@@ -136,22 +137,28 @@ export default {
                     {
                         min: 1,
                         max: 50,
-                        message: "账号必须是1到50个字符",
+                        message: "名称必须是1到50个字符",
                         trigger: "blur",
                     },
                 ],
                 chPrice: [
-                    { required: true, message: "请输入单价", trigger: "blur" },
+                    { required: true, message: "请输入价格", trigger: "blur" },
+                    {
+                      type: "number",
+                      message: "价格必须为数字类型",
+                      trigger: "blur",
+                    },
                 ],
+
             },
             modifyFormVisible: false,
-            modifyForm: {},
+            modifyForm: {},/* 存储待修改的检查项目的数据*/
         };
     },
     methods: {
         //点击修改药物信息
         modifyCheck(formName) {
-            this.$refs[formName].validate((valid) => {
+            this.$refs[formName].validate((valid) => {/*进行表单验证*/
                 if (valid) {
                     request
                         .get("check/modifyCheck", {
@@ -225,6 +232,7 @@ export default {
                     });
                 });
         },
+
         //点击增加确认按钮
         addCheck(formName) {
             this.$refs[formName].validate((valid) => {

@@ -2,23 +2,20 @@
     <el-container>
         <!-- 头部 -->
         <el-header style="height: 100px;">
-            <div class="words">
-                <span
-                    @click="menuClick('patientLayout')"
-                    style="font-size: 22px"
-                >
-                    <i class="iconfont icon-r-love" style="font-size: 26px">
-                        医院管理系统</i
-                    >
+          <div class="words words-left">
+                <span @click="menuClick('adminLayout')">
+                    <a href="http://localhost:8082" title="点击返回主界面" class="iconfont icon-r-love" style="font-size: 26px; text-decoration: none; color: black;">
+                        重庆大学医院管理系统</a>
                 </span>
-            </div>
+          </div>
+          <div style="height: 100%;"><img src="../assets/logo_cqu.png" alt="" style="position: relative; z-index: 1; width: 100%;height: 80%; margin: 10px auto;"></div>
             <div class="words">
                 <span
                     >欢迎您，<b>{{ userName }}</b
                     >&nbsp;</span
                 >
                 <span
-                    ><el-button type="danger" size="mini" @click="logout"
+                    ><el-button type="danger" class="logout_button" title="点击退出" @click="logout"
                         >退出</el-button
                     ></span
                 >
@@ -111,6 +108,7 @@ export default {
         tokenDecode(token) {
             if (token !== null) return jwtDecode(token);
         },
+
         //导航栏点击事件
         menuClick(path) {
             this.activePath = path;
@@ -118,6 +116,7 @@ export default {
             if (this.$route.path !== "/" + path) this.$router.push(path);
             console.log(path);
         },
+
         //退出登录
         logout() {
             this.$confirm("此操作将退出登录, 是否继续?", "提示", {
@@ -157,26 +156,37 @@ export default {
     cursor: pointer;
 }
 .el-header {
+    //background-image: url("../assets/banner-bg.png");
+    //background-position: center;
     background-color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 10px solid lightgrey;
+    border-bottom: 5px solid lightgrey;
     .words {
         text-align: center;
         span {
             color: black;
         }
     }
+  .words-left:hover{
+    transform: scale(1.1);
+  }
 }
 .el-container {
     height: 100%;
 }
 .el-aside {
     background-color: white;
-    border-right: 10px solid lightgrey;
+    border-right: 5px solid lightgrey;
 }
 .el-menu {
     border: 0;
+}
+.el-menu-item:hover{
+  transform: scale(1.1);
+}
+.logout_button:hover{
+  transform: scale(1.1);
 }
 </style>

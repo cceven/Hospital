@@ -65,7 +65,7 @@
                 </template>
             </el-table-column>
         </el-table>
-        <!-- 分页 -->
+        <!-- 基于Element UI的分页组件 <el-pagination> -->
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -79,6 +79,7 @@
         </el-pagination>
     </div>
 </template>
+
 <script>
 import request from "@/utils/request.js";
 
@@ -86,7 +87,7 @@ export default {
     name: "ArrangeDoctor",
     data() {
         return {
-            section: this.$route.query.section,
+            section: this.$route.query.section,//当前科室的名称或ID，从当前路由的查询参数中获取（即 this.$route.query.section
             doctorData: [],
             total: 3,
             pageNumber: 1,
@@ -119,6 +120,7 @@ export default {
                     }
                 });
         },
+
         deleteArrange(arrangeId) {
             request
                 .get("arrange/deleteArrange", {
@@ -138,12 +140,14 @@ export default {
             this.size = size;
             this.requestDoctors();
         },
-        //   页码改变时触发
+
+        //页码改变时触发
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestDoctors();
         },
+
         //根据部门请求医生信息
         requestDoctors() {
             request

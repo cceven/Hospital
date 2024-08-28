@@ -1,104 +1,146 @@
-<!--
- * @Description: 
-
- * @Date: 2023-01-14 20:02:29
--->
 <template>
-    <div>
-        <div class="indexPeople">
-            <div class="userImage">
-                <i class="iconfont icon-r-user2" style="font-size: 132px"></i>
-            </div>
-
-            <div class="userFont">
-                <div class="spanCure">
-                    <span>就诊概况</span>
-                </div>
-                <div class="spanPeople">
-                    <span>今天我的预约人数：{{ orderPeople }}</span>
-                </div>
-            </div>
+  <div style="padding: 10px 170px;">
+    <div class="info-container">
+      <div class="indexPeople">
+        <div class="userImage">
+          <i class="iconfont icon-r-user2" style="font-size: 132px"></i>
+        </div>
+        <div class="userFont">
+          <div class="spanCure">
+            <span>就诊概况</span>
+          </div>
+          <div class="spanPeople">
+            <span>今天预约挂号总人数：{{ orderPeople }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="indexPeople">
+        <div class="userImage">
+          <i class="iconfont icon-r-home" style="font-size: 132px"></i>
         </div>
 
-        <el-row>
-            <el-col :span="24">
-                <img src="@/assets/back_img.png" style="width: 941px;margin-left: 25px;">
-            </el-col>
-        </el-row>
+        <div class="userFont">
+          <div class="spanCure">
+            <span>住院概况</span>
+          </div>
+          <div class="spanPeople">
+            <span>今天住院总人数：{{ bedPeople }}</span>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- 清除浮动，确保轮播图位于上方 -->
+    <div style="clear: both;"></div>
+
+    <!-- 图片轮播模块 -->
+    <div class="carousel-container">
+      <el-carousel height="400px" :interval="2000" type="card" arrow="always">
+        <el-carousel-item v-for="(item, index) in carouselImages" :key="index">
+          <img :src="item" style="width: 100%; height: 100%; object-fit: cover;" />
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+  </div>
 </template>
+
 <script>
 import request from "@/utils/request.js";
-import jwtDecode from "jwt-decode";
-import { getToken } from "@/utils/storage.js";
+
+// 使用 require 方式导入图片
+const images = [
+  require('@/assets/img1.jpg'),
+  require('@/assets/img2.jpg'),
+  require('@/assets/img3.jpg')
+];
 
 export default {
-    name: "DoctorLayout",
-    data() {
-        return {
-            userId: 1,
-            orderPeople: 1,
-        };
+  name: "AdminLayout",
+  data() {
+    return {
+      orderPeople: 1, // 存储从服务器请求到的订单人数
+      bedPeople: 1,   // 用于存储从服务器请求到的床位人数
+      carouselImages: images // 图片轮播数据
+    };
+  },
+  methods: {
+    requestPeople() {
+      request
+          .get("order/orderPeople")
+          .then((res) => {
+            if (res.data.status !== 200)
+              return this.$message.error("数据请求失败");
+            this.orderPeople = res.data.data;
+          })
+          .catch((err) => {
+            console.error(err);
+          });
     },
-    methods: {
-        //token解码
-        tokenDecode(token) {
-            if (token !== null) return jwtDecode(token);
-        },
-        requestPeople() {
-            request
-                .get("order/orderPeopleByDid", {
-                    params: {
-                        dId: this.userId,
-                    },
-                })
-                .then((res) => {
-                    if (res.data.status !== 200)
-                        return this.$message.error("数据请求失败");
-                    this.orderPeople = res.data.data;
-                });
-        },
+
+    requestBed() {
+      request
+          .get("bed/bedPeople")
+          .then((res) => {
+            if (res.data.status !== 200)
+              return this.$message.error("数据请求失败");
+            this.bedPeople = res.data.data;
+          })
+          .catch((err) => {
+            console.error(err);
+          });
     },
-    created() {
-        this.userId = this.tokenDecode(getToken()).dId;
-        this.requestPeople();
-    },
-    mounted() {
-        
-    }
+  },
+
+  created() {
+    this.requestPeople();
+    this.requestBed();
+  },
+  mounted() {},
 };
 </script>
+
 <style lang="scss" scoped>
 .userFont {
-    height: 150px;
-    width: 250px;
-    color: white;
-    float: right;
-    .spanCure {
-        font-size: 15px;
-        margin-top: 60px;
-        margin-bottom: 15px;
-    }
-    .spanPeople {
-        font-size: 18px;
-    }
+  height: 150px;
+  width: 250px;
+  float: right;
+  color: white;
+
+  .spanCure {
+    font-size: 15px;
+    margin-top: 60px;
+    margin-bottom: 15px;
+  }
+
+  .spanPeople {
+    font-size: 18px;
+  }
 }
 
 .userImage {
-    height: 150px;
-    width: 150px;
-    font-size: 130px;
-    color: white;
-    float: left;
-    position: relative;
-    left: 40px;
-    top: 10px;
+  height: 150px;
+  width: 150px;
+  font-size: 130px;
+  color: white;
+  position: relative;
+  left: 40px;
+  top: 10px;
+  float: left;
 }
+
 .indexPeople {
-    height: 200px;
-    width: 500px;
-    background: #58b9ae;
-    margin-top: 50px;
-    margin-left: 30px;
+  height: 200px;
+  width: 440px;
+  background: #67a9fd;
+  float: left;
+  margin: 30px;
+}
+
+.carousel-container {
+  margin-top: 20px;
+}
+
+.info-container {
+  overflow: hidden; /* 防止子元素浮动影响父容器 */
 }
 </style>

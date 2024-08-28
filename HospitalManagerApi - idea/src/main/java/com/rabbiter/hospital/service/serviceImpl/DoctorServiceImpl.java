@@ -92,8 +92,8 @@ public class DoctorServiceImpl implements DoctorService {
         //密码加密
         String password = Md5Util.getMD5(doctor.getdPassword());
         doctor.setdPassword(password);
-        doctor.setdState(1);
-        doctor.setdStar(0.00);
+        doctor.setdState(1);//在职
+        doctor.setdStar(0.00);//星级
         doctor.setdPeople(0);
         this.doctorMapper.insert(doctor);
         return true;
@@ -116,9 +116,6 @@ public class DoctorServiceImpl implements DoctorService {
      */
     @Override
     public Boolean modifyDoctor(Doctor doctor) {
-//        QueryWrapper<Doctor> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("d_id", doctor.getDId());
-//        this.doctorMapper.update(doctor, queryWrapper);
         int i = this.doctorMapper.updateById(doctor);
         System.out.println("影响行数："+i);
         return true;
@@ -128,10 +125,6 @@ public class DoctorServiceImpl implements DoctorService {
      */
     @Override
     public HashMap<String, Object> findDoctorBySection(String dSection){
-//        HashMap<String, Object> hashMap = new HashMap<>();
-//        QueryWrapper<Doctor> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("d_section", dSection).eq("d_state", 1);
-//        List<Doctor> doctors = this.doctorMapper.selectList(queryWrapper);
         HashMap<String, Object> map = new HashMap<>();
         map.put("doctors", this.doctorMapper.findDoctorBySection(dSection));
         return map;
